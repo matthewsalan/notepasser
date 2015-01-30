@@ -6,9 +6,17 @@ require "pry"
 Camping.goes :Notepasser
 
 module Notepasser
-end
+	module Notepasser::Models
+		class User < Base
+			has_many :messages
+		end
 
-module Notepasser::Models
+		class Message < Base
+			belongs_to :user
+		end
+
+		
+	end
 end
 
 module Notepasser::Controllers
