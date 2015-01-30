@@ -21,10 +21,9 @@ module Notepasser::Controllers
 
 	class Index < R '/'
 		def get
-			binding.pry
+			"Welcome To Notepasser!"
 		end
 	end
-
 	class MessageController < R '/messages/(\d+)'
 		def get(message_id)
 			message = Notepasser::Models::Message.find(message_id)
@@ -52,7 +51,6 @@ module Notepasser::Controllers
     		new_message[x] = @input[x]
     	end
     	new_message.save
-    	
     	@status = 201
     	{:message => "Message #{new_message.id} has been created",
        :code => 201,
@@ -77,8 +75,8 @@ module Notepasser::Controllers
 			[:user_name, :user_id].each do |x|
 				new_user[x] = @input[x]
 			end
+			new_user.save
 		end
-		new_user.save
 	end
 
 	class UserController < R '/users/(\d+)'
