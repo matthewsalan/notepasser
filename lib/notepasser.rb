@@ -24,6 +24,7 @@ module Notepasser::Controllers
 			"Welcome To Notepasser!"
 		end
 	end
+	
 	class MessageController < R '/messages/(\d+)'
 		def get(message_id)
 			message = Notepasser::Models::Message.find(message_id)
@@ -43,27 +44,41 @@ module Notepasser::Controllers
 		end
 	end
 
+	class MessageReadController < R '/messages/(\d+)'
+  	def put 
+  		message = Notepasser::Models::Message.find(message_id)
+  		message.update_attribute(:message_status => true)
+  		message.save
+  	end
+  end
+
+  class MessageUnreadController < R '/messages/(\d+)'
+  	def put
+  	  message = Notepasser::Models::Message.find(message_id)
+  	  message.update_attribute(:message_status => false)
+  	  message.save
+  	end
+  end
+
   class MessagesController < R '/messages'
     def post 
     	@input.symbolize_keys!
       new_message = Notepasser::Models::Message.new
-      [:messgage_id, :user_id, :message_body].each do |x|
-    		new_message[x] = @input[x]
+      [:messgage_id, :sender_id, :receiver_id, :message_body].each do |x|
+    	  new_message[x] = @input[x]
     	end
     	new_message.save
     	@status = 201
     	{:message => "Message #{new_message.id} has been created",
-       :code => 201,
-       :post => new_message}.to_json
-     end
-
-		def read_unread 
-		end
+        :code => 201,
+        :post => new_message}.to_json
+      end
+    end
 
 		def get 
 			page = @input['page'].to_i || 1
-			start = (page - 1) * 10
-			finish = (page * 10) - 1
+			start = (page - 1) * 20
+			finish = (page * 20) - 1
 			Notepasser::Models::Message.where(:id)
 		end
 	end
