@@ -18,6 +18,13 @@ module Notepasser
 end
 
 module Notepasser::Controllers 
+
+	class Index < R '/'
+		def get
+			binding.pry
+		end
+	end
+
 	class MessageController < R '/messages/(\d+)'
 		def get(message_id)
 			message = Notepasser::Models::Message.find(message_id)
@@ -35,15 +42,31 @@ module Notepasser::Controllers
 			@status = 404
 			"No Message To Delete"
 		end
+	end
 
-	class MessagesController < R '/messages'
+  class MessagesController < R '/messages'
     def post 
-		end
+    	@input.symbolize_keys!
+      new_message = Notepasser::Models::Message.new
+      [:messgage_id, :user_id, :message_body].each do |x|
+    		new_message[x] = @input[x]
+    	end
+    	new_message.save
+    	
+    	@status = 201
+    	{:message => "Message #{new_message.id} has been created",
+       :code => 201,
+       :post => new_message}.to_json
+     end
 
 		def read_unread 
 		end
 
 		def get 
+			page = @input['page'].to_i || 1
+			start = (page - 1) * 10
+			finish = (page * 10) - 1
+			Notepasser::Models::Message.where(:id)
 		end
 	end
 
@@ -55,6 +78,7 @@ module Notepasser::Controllers
 				new_user[x] = @input[x]
 			end
 		end
+		new_user.save
 	end
 
 	class UserController < R '/users/(\d+)'
@@ -75,3 +99,6 @@ module Notepasser::Controllers
 		end
 	end
 end
+
+
+
