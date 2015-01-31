@@ -1,0 +1,18 @@
+require 'httparty'
+require 'json'
+require 'pry'
+
+class NoteClient
+  include HTTParty
+  base_uri "http://10.0.0.74"
+
+  def mark_read
+  end
+
+ 	def mark_unread
+ 	end
+end
+
+client = NoteClient.new
+
+binding.pry

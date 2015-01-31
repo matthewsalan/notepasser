@@ -18,7 +18,6 @@ module Notepasser
 end
 
 module Notepasser::Controllers 
-
 	class Index < R '/'
 		def get
 			"Welcome To Notepasser!"
@@ -62,17 +61,16 @@ module Notepasser::Controllers
 
   class MessagesController < R '/messages'
     def post 
-    	@input.symbolize_keys!
+      @input.symbolize_keys!
       new_message = Notepasser::Models::Message.new
       [:messgage_id, :sender_id, :receiver_id, :message_body].each do |x|
-    	  new_message[x] = @input[x]
-    	end
+      	new_message[x] = @input[x]
+      end
     	new_message.save
     	@status = 201
     	{:message => "Message #{new_message.id} has been created",
         :code => 201,
         :post => new_message}.to_json
-      end
     end
 
 		def get 
@@ -87,16 +85,16 @@ module Notepasser::Controllers
 		def post
 			@input.symbolize_keys!
 			new_user = Notepasser::Models::User.new
-			[:user_name, :user_id].each do |x|
-				new_user[x] = @input[x]
-			end
+			[:user_name].each do |x|
+		    new_user[x] = @input[x]
+		  end
 			new_user.save
 		end
 	end
 
 	class UserController < R '/users/(\d+)'
     def delete(user_id) 
-    	user = Notepasser::Models::User.find(user_id)
+      user = Notepasser::Models::User.find(user_id)
     	user.destroy
     	@status = 204
     rescue ActiveRecord::RecordNotFound
@@ -112,6 +110,7 @@ module Notepasser::Controllers
 		end
 	end
 end
+
 
 
 
