@@ -97,10 +97,13 @@ module Notepasser::Controllers
 	end
 
 	class UserController < R '/users/(\d+)'
-    def delete(user_id) 
-      user = Notepasser::Models::User.find(user_id)
+    def delete(id) 
+      user = Notepasser::Models::User.find(id)
     	user.destroy
     	@status = 204
+    	{:message => "User #{id} has been deleted",
+         :code => 204,
+         :post => user }.to_json
     rescue ActiveRecord::RecordNotFound
     	@status = 404
     	"No User To Delete"

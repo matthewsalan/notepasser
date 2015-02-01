@@ -27,12 +27,12 @@ class NoteClient
 
 	def add_user(user_name)
 		options = {:body => {:user_name => user_name}}
-		self.class.post("/users/", :body => options)
+		self.class.post("/users/", options)
 	end
 
 	def new_message
-		options = {:sender_id => sender_id, :receiver_id => receiver_id, :message_body => message_body}
-		resp = self.class.post("/messages", :body => options)
+		options = {:body => {:sender_id => sender_id, :receiver_id => receiver_id, :message_body => message_body}}
+		resp = self.class.post("/messages", options)
 	end
 
 	def delete_message(message_id)
@@ -40,18 +40,18 @@ class NoteClient
 	end
 
 	def mark_read(message_id)
-		options = {:message_status => message_status}
-		self.class.put("/messages/#{message_id}", :body => options)
+		options = {:body => {:message_status => message_status}}
+		self.class.put("/messages/#{message_id}", options)
 	end
 
 	def mark_unread(message_id)
-		options = {:message_status => message_status}
-		self.class.delete("/messages/#{message_id}", :body => options)
+		options = {:body => {:message_status => message_status}}
+		self.class.delete("/messages/#{message_id}", options)
 	end
 
 	def get_all_messages
-		options = {:user_name => user_name}
-		resp = self.class.get("/messages", :body => options)
+		options = {:body => {:user_name => user_name}}
+		resp = self.class.get("/messages", options)
 		messages = JSON.parse(resp.body)
     all_messages = []
     messages.each do |x|
