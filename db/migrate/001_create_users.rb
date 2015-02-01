@@ -2,7 +2,7 @@
 	def self.up 
 		create_table :users do |t|
 			t.string :user_name
-			t.timestamps
+			t.timestamps null: true
 		end
 	end
 
