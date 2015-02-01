@@ -7,11 +7,11 @@ Camping.goes :Notepasser
 
 module Notepasser
 	module Notepasser::Models
-		class User < Base
+		class User < ActiveRecord::Base
 			has_many :messages
 		end
 
-		class Message < Base
+		class Message < ActiveRecord::Base
 			belongs_to :user
 		end	
 	end

@@ -4,7 +4,7 @@ require 'pry'
 
 class NoteClient
 	include HTTParty
-	base_uri "http://10.0.0.74"
+	base_uri "http://10.0.1.4:3301"
 
 	def get_user(id)
 		resp = self.class.get("/users/#{id}")
@@ -25,9 +25,9 @@ class NoteClient
 		self.class.delete("/users/#{id}")
 	end
 
-	def add_user(user_name = "Alan")
-		options = {:user_name => user_name}
-		self.class.put("/users", :body => options)
+	def add_user(user_name)
+		options = {:body => {:user_name => user_name}}
+		self.class.post("/users/", :body => options)
 	end
 
 	def new_message
