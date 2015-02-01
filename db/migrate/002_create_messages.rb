@@ -1,4 +1,4 @@
-class CreateMessage < ActiveRecord::Migration
+class CreateMessages < ActiveRecord::Migration
 	def self.up 
 		create_table :messages do |t|
 			t.integer :sender_id
