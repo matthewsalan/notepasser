@@ -89,6 +89,10 @@ module Notepasser::Controllers
 		    new_user[x] = @input[x]
 		  end
 			new_user.save
+			@status = 201
+			{:messgage => "New user #{new_user.user_name} has been created",
+			  :code => 201,
+			  :post => new_user}.to_json
 		end
 	end
 
