@@ -4,7 +4,7 @@ require 'pry'
 
 class NoteClient
 	include HTTParty
-	base uri "http://127.0.0.1"
+	base_uri "http://10.0.0.74"
 
 	def get_user(id)
 		resp = self.class.get("/users/#{id}")
@@ -25,7 +25,7 @@ class NoteClient
 		self.class.delete("/users/#{id}")
 	end
 
-	def add_user
+	def add_user(user_name = "Alan")
 		options = {:user_name => user_name}
 		self.class.put("/users", :body => options)
 	end
@@ -39,14 +39,14 @@ class NoteClient
 		self.class.delete("/messages/#{message_id}")
 	end
 
-	def mark_read(message_id,)
+	def mark_read(message_id)
 		options = {:message_status => message_status}
 		self.class.put("/messages/#{message_id}", :body => options)
 	end
 
 	def mark_unread(message_id)
 		options = {:message_status => message_status}
-		self.class.delete("/messages/", :body => options)
+		self.class.delete("/messages/#{message_id}", :body => options)
 	end
 
 	def get_all_messages
@@ -64,7 +64,6 @@ class NoteClient
 		resp = self.class.get("/messages/#{message_id}")
 		JSON.parse(resp.body)
 	end
-
 end
 
 
