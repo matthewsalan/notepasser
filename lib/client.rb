@@ -14,11 +14,6 @@ class NoteClient
 	def get_all_users
 		resp = self.class.get("/users")
 		users = JSON.parse(resp.body)
-		user_info = []
-		users.each do |x|
-			user_info << get_user(x['user_name'])
-		end
-		return user_info
 	end
 
 	def delete_user(id)
@@ -30,10 +25,15 @@ class NoteClient
 		self.class.post("/users/", options)
 	end
 
-	def new_message
-		options = {:body => {:sender_id => sender_id, :receiver_id => receiver_id, :message_body => message_body}}
-		resp = self.class.post("/messages", options)
+	def new_message(sender_id, receiver_id, message_body)
+		options = {:sender_id => sender_id, :receiver_id => receiver_id, :message_body => message_body}
+		resp = self.class.post("/messages", :body => options)
 	end
+
+	# def new_message(info = {:sender_id => sender_id, :receiver_id => receiver_id, :message_body => message_body})
+	# 	options = {:body => info.to_json}
+	# 	resp = self.class.post("/messages", options)
+	# end
 
 	def delete_message(message_id)
 		self.class.delete("/messages/#{message_id}")

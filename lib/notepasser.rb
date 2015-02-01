@@ -63,7 +63,7 @@ module Notepasser::Controllers
     def post 
       @input.symbolize_keys!
       new_message = Notepasser::Models::Message.new
-      [:messgage_id, :sender_id, :receiver_id, :message_body].each do |x|
+      [:sender_id, :receiver_id, :message_body].each do |x|
       	new_message[x] = @input[x]
       end
     	new_message.save
@@ -77,7 +77,7 @@ module Notepasser::Controllers
 			page = @input['page'].to_i || 1
 			start = (page - 1) * 20
 			finish = (page * 20) - 1
-			Notepasser::Models::Message.where(:id)
+			Notepasser::Models::Message.where(:message_id => [start..finish]).to_json
 		end
 	end
 
@@ -94,6 +94,21 @@ module Notepasser::Controllers
 			  :code => 201,
 			  :post => new_user}.to_json
 		end
+
+		def get
+			user_info = []
+		  all_users = Notepasser::Models::User.find_each do |x|
+			  user_info << all_users(x['user_name'])
+			end
+		  user_info.to_json
+		end
+
+		# def get
+		# 	page = @input['page'].to_i || 1
+		# 	start = (page - 1) * 20
+		# 	finish = (page * 20) - 1
+		# 	Notepasser::Models::User.where(:id => [start..finish]).to_json
+		# end
 	end
 
 	class UserController < R '/users/(\d+)'
@@ -109,8 +124,9 @@ module Notepasser::Controllers
     	"No User To Delete"
 		end
 
-		def get(user_id) 
-			user = Notepasser::Models::User.find(user_id)
+		def get(id) 
+			user = Notepasser::Models::User.find(id)
+			user.to_json
 		rescue ActiveRecord::RecordNotFound
 			@status = 404
 			"404 - No User Found"
